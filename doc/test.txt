@@ -70,8 +70,13 @@ In all commands [args] are forwarded to the underlying test runner.
 
 RUNNER COMMANDS                                 *test-runner_commands*
 
-In all commands [args] are forwarded to the underlying test runner.
+In all commands [args] are forwarded to the underlying test runner. To avoid
+pollution they are not defined by default, instead you can choose the ones you want,
+for example:
 
+>
+  let g:test#runner_commands = ['Minitest', 'Mocha']
+<
                                                 *test-:RSpec*
 :RSpec [args]                Uses the `rspec` command.
 
@@ -635,6 +640,11 @@ To have the Neovim sticky strategy abort any currently running tests before
 scheduling a new one, use:
 >
   let g:test#neovim_sticky#kill_previous = 1
+<
+To have the Neovim sticky strategy open an existing terminal in a new split
+when it is not currently visible, use:
+>
+    let test#neovim_sticky#reopen_window = 1
 <
 You may find yourself specifying certain options for your test runners in
 certain situations. You can configure your preferred options with
