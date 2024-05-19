@@ -1,4 +1,5 @@
 # test.vim
+![CI workflow](https://github.com/vim-test/vim-test/actions/workflows/ci.yml/badge.svg)
 
 A Vim wrapper for running tests on different granularities.
 
@@ -113,6 +114,7 @@ let test#strategy = "dispatch"
 | **[Kitty]**                     | `kitty`                                                     | Sends test commands to Kitty terminal.                                                                                                                            |
 | **[Shtuff]**                    | `shtuff`                                                    | Sends test commands to remote terminal via [shtuff][Shtuff].                                                                                                      |
 | **[Harpoon]**                    | `harpoon`                                                  | Sends test commands to neovim terminal using a terminal managed by [harpoon][Harpoon]. By default commands are sent to terminal number 1, you can choose your terminal by setting `g:test#harpoon_term` with the terminal you want                                                                                                     |
+| **[WezTerm]**                   | `wezterm`                                                 | Sends test commands to an adjacent [WezTerm][WezTerm] pane.                                                                                                         |
 
 You can also set up strategies per granularity:
 
@@ -446,13 +448,23 @@ different working directory for running tests:
 let test#project_root = "/path/to/your/project"
 ```
 
+Alternatively you can pass in a function that'll be evaluated before each test run.
+```vim
+function! CustomPath()
+  return "~/Project"
+endfunction
+
+let test#project_root = function('CustomPath')
+```
+
 ### Language-specific
 
 #### Python
 
-Since there are multiple Python test runners for the same type of tests,
-test.vim has no way of detecting which one did you intend to use. By default
-the first available will be chosen, but you can force a specific one:
+If your project has a [pytest configuration file](https://docs.pytest.org/en/7.1.x/reference/customize.html),
+then pytest will automatically be detected. For other Python test runners, test.vim
+has no way of detecting which one did you intend to use. By default, the first
+available will be chosen, but you can force a specific one:
 
 ``` vim
 let test#python#runner = 'pytest'
@@ -462,10 +474,10 @@ let test#python#runner = 'pytest'
 The `pytest` and `djangotest` runner optionally supports [pipenv](https://github.com/pypa/pipenv).
 If you have a `Pipfile`, it will use `pipenv run pytest` instead of just
 `python -m pytest`. They also support [poetry](https://github.com/sdispater/poetry)
-and will use `poetry run pytest` if it detects a `poetry.lock`. The pyunit and nose 
+and will use `poetry run pytest` if it detects a `poetry.lock`. The pyunit and nose
 runner supports [pipenv](https://github.com/pypa/pipenv) as well and will
-respectively use `pipenv run python -m unittest` or `pipenv run python -m nosetests` 
-if there is a `Pipfile`. It also supports [pdm](https://pdm.fming.dev/) as well and 
+respectively use `pipenv run python -m unittest` or `pipenv run python -m nosetests`
+if there is a `Pipfile`. It also supports [pdm](https://pdm.fming.dev/) as well and
 will use `poetry run pytest` if there is a `pdm.lock` file.
 
 #### Java
@@ -658,7 +670,7 @@ let g:test#cpp#catch2#relToProject_build_dir = "."
 ```
 We assume that your compiled executables are stored in `build` directory. If not, you can override this with:
 ```vim
-let g:test#cpp#catch2#bin_dir = "../path/to/your/binaries/dir" 
+let g:test#cpp#catch2#bin_dir = "../path/to/your/binaries/dir"
 ```
 Suite: We assume that you are using Cmake as your build system, and are registering each test file to it. If not, override the following command.
 ```vim
@@ -810,3 +822,4 @@ Copyright © Janko Marohnić. Distributed under the same terms as Vim itself. Se
 [Harpoon]: https://github.com/ThePrimeagen/harpoon
 [Ember.js]: https://github.com/emberjs/ember.js
 [Toggleterm]: https://github.com/akinsho/toggleterm.nvim
+[WezTerm]: https://github.com/wez/wezterm

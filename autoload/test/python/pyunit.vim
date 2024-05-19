@@ -1,5 +1,5 @@
 if !exists('g:test#python#pyunit#file_pattern')
-  let g:test#python#pyunit#file_pattern = '\v^test.*\.py$'
+  let g:test#python#pyunit#file_pattern = '\v(^test.*|test)\.py$'
 endif
 
 function! test#python#pyunit#test_file(file) abort
@@ -7,7 +7,7 @@ function! test#python#pyunit#test_file(file) abort
     if exists('g:test#python#runner')
       return g:test#python#runner ==# 'pyunit'
     else
-      return executable(test#python#executable())
+      return test#python#has_import(a:file, 'unittest')
     endif
   endif
 endfunction
