@@ -521,6 +521,12 @@ With this set up you can run your integration tests with the :IntegrationTest pl
 nnoremap <silent><leader>itf :IntegrationTest -Dtest=foo -DfailIfNoTests=false -am -Dpmd.skip=true -Dcheckstyle.skip=true<CR>
 ```
 
+If you want to customize the Maven test command, you can set `g:test#java#maventest#test_cmd` in your vimrc file.
+
+```vim
+  let g:test#java#maventest#test_cmd = 'surefire:test -Dtest'
+```
+
 The above command makes sure that no surefire tests will be run (by passing in a dummy test and makes sure that the plugin won't fail), it also makes the dependent modules, skips PMD and checkstyle checks as well.
 
 Only for maven, the commands `:TestFile` and `:TestNearest` use the same strategy and you can use them to run the integration tests from file or method.
@@ -809,6 +815,20 @@ $ vim-flavor test spec/
 ```
 
 Or if you're inside of Vim, you can simply run `:VSpec` provided by test.vim.
+
+## Unsaved changes
+
+If `autowrite` or `autowriteall` are set then unsaved changes will be
+written to disk with `:wall` before each test execution.
+
+### Prompt for unsaved changes
+
+You can enable a user prompt asking whether to write unsaved changes
+prior to executing a test by
+
+```vim
+  let g:test#prompt_for_unsaved_changes = 1
+```
 
 ## Credits
 
