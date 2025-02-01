@@ -90,7 +90,10 @@ endfunction
 function! s:neovim_reopen_term(bufnr) abort
   let l:current_window = win_getid()
   let term_position = get(g:, 'test#neovim#term_position', 'botright')
-  execute term_position . ' sbuffer ' . a:bufnr
+  execute term_position . ' new'
+  " we need to unload the no name buffer we just created
+  let l:current_buffer = bufnr("%")
+  execute 'buffer ' . a:bufnr . ' | bunload ' . l:current_buffer
 
   let l:new_window = win_getid()
   call win_gotoid(l:current_window)
@@ -131,7 +134,8 @@ function! test#strategy#neovim_sticky(cmd) abort
     let l:win = [s:neovim_reopen_term(l:buffers[0].bufnr)]
   endif
 
-  call chansend(l:buffers[0].variables.terminal_job_id, l:cmd)
+  " Needs explicit join to work in all shells
+  call chansend(l:buffers[0].variables.terminal_job_id, join(l:cmd, "\r"))
   if len(l:win) > 0
     call win_execute(l:win[0], 'normal G', 1)
   endif
