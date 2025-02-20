@@ -49,7 +49,7 @@ function! test#base#file_exists(file) abort
 endfunction
 
 function! test#base#escape_regex(string) abort
-  return escape(a:string, '?+*\^$.|{}[]()')
+  return escape(a:string, '?+*\^$.|{}[]')
 endfunction
 
 " Takes a position and a dictionary of patterns and a optional configuration, and returns list of strings
